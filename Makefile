@@ -10,11 +10,11 @@ pull:
 
 # 下载 php 扩展
 download:
-	mkdir php/ext
 	wget http://pecl.php.net/get/redis-2.2.7.tgz -O php/ext/redis.tgz
 	wget http://pecl.php.net/get/memcached-2.2.0.tgz -O php/ext/memcached.tgz
 	wget http://pecl.php.net/get/xdebug-2.3.2.tgz -O php/ext/xdebug.tgz
 	wget http://pecl.php.net/get/memcache-2.2.7.tgz -O php/ext/memcache.tgz
+	wget http://getcomposer.org/composer.phar -O php/bin/composer
 
 # Dockerfile 批量构建 Images
 build:
@@ -23,6 +23,7 @@ build:
 	make build-mysql
 	make build-memcached
 	make build-redis
+	docker images
 
 # Docker Container 依次运行
 run:
@@ -31,21 +32,29 @@ run:
 	make run-mysql
 	make run-memcached
 	make run-redis
+	docker ps
 
 # Docker Container 重启
 restart:
 	docker restart phpfpm
 	docker restart nginx-server
 	docker restart mysql-server
+	docker restart memcached-server
+	docker restart redis-server
+	docker ps
 
 # Docker Container 停止并删除
 stop:
 	docker stop phpfpm
 	docker stop nginx-server
 	docker stop mysql-server
+	docker stop memcached-server
+	docker stop redis-server
 	docker rm phpfpm
 	docker rm nginx-server
-	docker stop mysql-server
+	docker rm mysql-server
+	docker rm memcached-server
+	docker rm redis-server
 
 # Docker Container Logs
 log:
@@ -60,7 +69,7 @@ run-nginx:
 	docker run --name nginx-server -d -p 80:80 --link phpfpm:phpfpm -v ~/docker/app:/app --volumes-from phpfpm -t hyancat/nginx
 
 in-nginx:
-	docker run -i -p 80:80 -v ~/docker/app:/app -t hyancat/nginx /bin/bash
+	docker run -i -v ~/docker/app:/app -t hyancat/nginx /bin/bash
 
 ################################################################
 
@@ -71,7 +80,7 @@ run-php:
 	docker run --name phpfpm -d -v ~/docker/app:/app -t hyancat/php
 
 in-php:
-	docker run -i -p 9000:9000 -v ~/docker/app:/app -t hyancat/php /bin/bash
+	docker run -i -v ~/docker/app:/app -t hyancat/php /bin/bash
 
 ################################################################
 
@@ -82,7 +91,7 @@ run-mysql:
 	docker run --name mysql-server -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=secret -t hyancat/mysql
 
 in-mysql:
-	docker run -i -p 3306:3306 -e MYSQL_ROOT_PASSWORD=secret -t hyancat/mysql /bin/bash
+	docker run -i -e MYSQL_ROOT_PASSWORD=secret -t hyancat/mysql /bin/bash
 
 ################################################################
 
