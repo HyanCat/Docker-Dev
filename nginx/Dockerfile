@@ -2,6 +2,7 @@ FROM nginx
 
 # Nginx Config
 ADD nginx.conf /etc/nginx/nginx.conf
+ADD conf.d.example/*.conf /etc/nginx/conf.d/
 ADD conf.d/*.conf /etc/nginx/conf.d/
 
 # User Permission

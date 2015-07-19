@@ -1,3 +1,4 @@
 php/ext
 php/bin
 node/bin
+nginx/conf.d
