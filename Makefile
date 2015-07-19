@@ -1,4 +1,6 @@
 ################################################################
+####                         Main                          #####
+################################################################
 
 # 官方原版镜像库
 pull:
@@ -63,6 +65,8 @@ log:
 	docker logs -f nginx-server
 
 ################################################################
+####                         Nginx                         #####
+################################################################
 
 build-nginx:
 	docker build -t hyancat/nginx ./nginx
@@ -74,8 +78,13 @@ run-nginx:
 		-t hyancat/nginx
 
 in-nginx:
+	docker exec -it nginx-server /bin/bash
+
+new-nginx:
 	docker run -i -v ~/Code:/docker/code -t hyancat/nginx /bin/bash
 
+################################################################
+####                          PHP                          #####
 ################################################################
 
 build-php:
@@ -85,8 +94,13 @@ run-php:
 	docker run --name phpfpm -d -v ~/Code:/docker/code -t hyancat/php
 
 in-php:
+	docker exec -it phpfpm /bin/bash
+
+new-php:
 	docker run -i -v ~/Code:/docker/code -t hyancat/php /bin/bash
 
+################################################################
+####                         MySQL                         #####
 ################################################################
 
 MYSQL_ROOT_PASSWORD = secret
@@ -100,8 +114,13 @@ run-mysql:
 		-t hyancat/mysql
 
 in-mysql:
+	docker exec -it mysql-server /bin/bash
+
+new-mysql:
 	docker run -i -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} -t hyancat/mysql /bin/bash
 
+################################################################
+####                       Memcached                       #####
 ################################################################
 
 build-memcached:
@@ -111,6 +130,7 @@ run-memcached:
 	docker run --name memcached-server -d -p 11211:11211 -t hyancat/memcached
 
 ################################################################
+####  Redis  ####
 
 build-redis:
 	docker build -t hyancat/redis ./redis
@@ -119,6 +139,8 @@ run-redis:
 	docker run --name redis-server -d -p 6379:6379 -t hyancat/redis
 
 ################################################################
+####                        Nodejs                         #####
+################################################################
 
 DOCKER_BRIDGE_IP = $(shell ifconfig en0 | grep 'inet ' | awk '{ print $$2}')
 NOTIFY_PORT = 13579
@@ -126,13 +148,15 @@ NOTIFY_PORT = 13579
 build-node:
 	docker build -t hyancat/nodejs ./node
 
-in-node:
+new-node:
 	docker run --rm -it \
 		-v ~/Code:/docker/code \
 		-e NOTIFY_SEND_URL="http://${DOCKER_BRIDGE_IP}:${NOTIFY_PORT}" \
 		hyancat/nodejs \
 		/bin/bash
 
+################################################################
+####                        Others                         #####
 ################################################################
 
 # 清除无效 Images
