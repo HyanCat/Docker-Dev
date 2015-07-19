@@ -68,10 +68,13 @@ build-nginx:
 	docker build -t hyancat/nginx ./nginx
 
 run-nginx:
-	docker run --name nginx-server -d -p 80:80 --link phpfpm:phpfpm -v ~/docker/app:/app --volumes-from phpfpm -t hyancat/nginx
+	docker run --name nginx-server -d -p 80:80 \
+		--link phpfpm:phpfpm \
+		-v ~/Code:/docker/code \
+		-t hyancat/nginx
 
 in-nginx:
-	docker run -i -v ~/docker/app:/app -t hyancat/nginx /bin/bash
+	docker run -i -v ~/Code:/docker/code -t hyancat/nginx /bin/bash
 
 ################################################################
 
@@ -79,21 +82,25 @@ build-php:
 	docker build -t hyancat/php ./php
 
 run-php:
-	docker run --name phpfpm -d -v ~/docker/app:/app -t hyancat/php
+	docker run --name phpfpm -d -v ~/Code:/docker/code -t hyancat/php
 
 in-php:
-	docker run -i -v ~/docker/app:/app -t hyancat/php /bin/bash
+	docker run -i -v ~/Code:/docker/code -t hyancat/php /bin/bash
 
 ################################################################
+
+MYSQL_ROOT_PASSWORD = secret
 
 build-mysql:
 	docker build -t hyancat/mysql ./mysql
 
 run-mysql:
-	docker run --name mysql-server -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=secret -t hyancat/mysql
+	docker run --name mysql-server -d -p 3306:3306 \
+		-e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
+		-t hyancat/mysql
 
 in-mysql:
-	docker run -i -e MYSQL_ROOT_PASSWORD=secret -t hyancat/mysql /bin/bash
+	docker run -i -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} -t hyancat/mysql /bin/bash
 
 ################################################################
 
@@ -113,16 +120,15 @@ run-redis:
 
 ################################################################
 
-build-node:
-	docker build -t hyancat/nodejs ./node
-
 DOCKER_BRIDGE_IP = $(shell ifconfig en0 | grep 'inet ' | awk '{ print $$2}')
 NOTIFY_PORT = 13579
 
-in-node:
+build-node:
+	docker build -t hyancat/nodejs ./node
 
+in-node:
 	docker run --rm -it \
-		-v ~/docker/app:/app \
+		-v ~/Code:/docker/code \
 		-e NOTIFY_SEND_URL="http://${DOCKER_BRIDGE_IP}:${NOTIFY_PORT}" \
 		hyancat/nodejs \
 		/bin/bash

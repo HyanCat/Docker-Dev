@@ -45,9 +45,9 @@ RUN chmod 755 /usr/local/bin/composer
 RUN useradd -M -s /usr/sbin/nologin webuser
 RUN usermod -u 1000 webuser
 
-RUN mkdir /app
-RUN chown -R webuser.webuser /app
-WORKDIR /app
+RUN mkdir /docker
+RUN chown -R webuser.webuser /docker
+WORKDIR /docker
 
 EXPOSE 9000
-VOLUME ["/app"]
+VOLUME ["/docker"]

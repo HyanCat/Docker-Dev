@@ -7,11 +7,12 @@ ADD conf.d/*.conf /etc/nginx/conf.d/
 # User Permission
 RUN useradd -M -s /usr/sbin/nologin webuser
 
-RUN mkdir /app
-RUN chown -R webuser.webuser /app
+RUN mkdir /docker && mkdir /docker/app
+RUN echo "<h1>Hello Nginx !</h1>" > /docker/app/index.html
+RUN chown -R webuser.webuser /docker
 
-WORKDIR /app
+WORKDIR /docker
 
 EXPOSE 80
 
-VOLUME ["/app"]
+VOLUME ["/docker"]
