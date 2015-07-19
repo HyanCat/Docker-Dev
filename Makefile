@@ -7,9 +7,10 @@ pull:
 	docker pull mysql
 	docker pull memcached
 	docker pull redis
+	docker pull nodejs
 
-# 下载 php 扩展
 download:
+	# 下载 php 扩展
 	wget http://pecl.php.net/get/redis-2.2.7.tgz -O php/ext/redis.tgz
 	wget http://pecl.php.net/get/memcached-2.2.0.tgz -O php/ext/memcached.tgz
 	wget http://pecl.php.net/get/xdebug-2.3.2.tgz -O php/ext/xdebug.tgz
@@ -23,6 +24,7 @@ build:
 	make build-mysql
 	make build-memcached
 	make build-redis
+	make build-node
 	docker images
 
 # Docker Container 依次运行
@@ -108,6 +110,22 @@ build-redis:
 
 run-redis:
 	docker run --name redis-server -d -p 6379:6379 -t hyancat/redis
+
+################################################################
+
+build-node:
+	docker build -t hyancat/nodejs ./node
+
+DOCKER_BRIDGE_IP = $(shell ifconfig en0 | grep 'inet ' | awk '{ print $$2}')
+NOTIFY_PORT = 13579
+
+in-node:
+
+	docker run --rm -it \
+		-v ~/docker/app:/app \
+		-e NOTIFY_SEND_URL="http://${DOCKER_BRIDGE_IP}:${NOTIFY_PORT}" \
+		hyancat/nodejs \
+		/bin/bash
 
 ################################################################
 
