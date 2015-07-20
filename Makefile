@@ -111,6 +111,7 @@ build-mysql:
 run-mysql:
 	docker run --name mysql-server -d -p 3306:3306 \
 		-e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
+		-v ~/Docker/data:/var/lib/mysql \
 		-t hyancat/mysql
 
 in-mysql:
