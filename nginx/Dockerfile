@@ -1,5 +1,7 @@
 FROM nginx
 
+MAINTAINER HyanCat <hyancat@live.cn>
+
 # Nginx Config
 ADD nginx.conf /etc/nginx/nginx.conf
 ADD conf.d.example/*.conf /etc/nginx/conf.d/

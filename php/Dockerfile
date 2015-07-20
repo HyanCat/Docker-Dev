@@ -1,5 +1,7 @@
 FROM php:fpm
 
+MAINTAINER HyanCat <hyancat@live.cn>
+
 # Prepare Env
 
 ADD sources.list    /etc/apt/sources.list
