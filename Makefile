@@ -36,7 +36,7 @@ run:
 	make run-mysql
 	make run-memcached
 	make run-redis
-	docker ps
+	docker ps -a
 
 # Docker Container 重启
 restart:
