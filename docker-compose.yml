@@ -24,6 +24,8 @@ mysql:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - ~/Docker/data:/var/lib/mysql
 
 memcached:
     build: ./memcached
