@@ -131,7 +131,8 @@ run-memcached:
 	docker run --name memcached-server -d -p 11211:11211 -t hyancat/memcached
 
 ################################################################
-####  Redis  ####
+####                         Redis                         #####
+################################################################
 
 build-redis:
 	docker build -t hyancat/redis ./redis
