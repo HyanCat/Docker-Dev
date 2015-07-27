@@ -17,6 +17,7 @@ download:
 	wget http://pecl.php.net/get/memcached-2.2.0.tgz -O php/ext/memcached.tgz
 	wget http://pecl.php.net/get/xdebug-2.3.2.tgz -O php/ext/xdebug.tgz
 	wget http://pecl.php.net/get/memcache-2.2.7.tgz -O php/ext/memcache.tgz
+	wget http://pecl.php.net/get/imagick-3.3.0RC2.tgz -O php/ext/imagick.tgz
 	wget http://getcomposer.org/composer.phar -O php/bin/composer
 
 # Dockerfile 批量构建 Images

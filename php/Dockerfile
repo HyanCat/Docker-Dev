@@ -11,8 +11,11 @@ RUN apt-get update && apt-get install -y \
         libmcrypt-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libpng12-dev \
-        && rm -r /var/lib/apt/lists/*
+        libpng12-dev
+
+RUN apt-get install -y imagemagick libmagickwand-dev
+
+RUN rm -r /var/lib/apt/lists/*
 
 
 # Install PHP extensions
@@ -21,6 +24,7 @@ COPY ext/memcached.tgz /tmp/memcached.tgz
 COPY ext/redis.tgz /tmp/redis.tgz
 COPY ext/xdebug.tgz /tmp/xdebug.tgz
 COPY ext/memcache.tgz /tmp/memcache.tgz
+COPY ext/imagick.tgz /tmp/imagick.tgz
 
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
         && docker-php-ext-install zip \
@@ -28,10 +32,13 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
         && docker-php-ext-install mbstring \
         && docker-php-ext-install mcrypt \
         && docker-php-ext-install pdo_mysql
-RUN pecl install /tmp/memcached.tgz && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/memcached.ini \
-        && pecl install /tmp/redis.tgz && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini \
-        && pecl install /tmp/memcache.tgz && echo "extension=memcache.so" > /usr/local/etc/php/conf.d/memcache.ini \
-        && pecl install /tmp/xdebug.tgz && echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so" > /usr/local/etc/php/conf.d/xdebug.ini
+
+RUN pecl install /tmp/memcached.tgz && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/memcached.ini
+RUN pecl install /tmp/redis.tgz && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
+RUN pecl install /tmp/memcache.tgz && echo "extension=memcache.so" > /usr/local/etc/php/conf.d/memcache.ini
+RUN pecl install /tmp/imagick.tgz && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/imagick.ini
+RUN pecl install /tmp/xdebug.tgz && echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so" > /usr/local/etc/php/conf.d/xdebug.ini
+        
 
 # PHP config
 
