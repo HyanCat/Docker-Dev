@@ -162,8 +162,9 @@ new-node:
 ####                        Others                         #####
 ################################################################
 
-# 清除无效 Images
+# 清除无用 Containers & Images
 clean:
+	docker rm $(shell docker ps -a | grep "Exited" | awk '{print $$1}')
 	docker rmi $(shell docker images | grep "<none>" | awk '{print $$3}')
 
 # 停止所有 Containers （慎重）

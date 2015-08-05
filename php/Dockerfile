@@ -11,11 +11,11 @@ RUN apt-get update && apt-get install -y \
         libmcrypt-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libpng12-dev
+        libpng12-dev \
+        imagemagick \
+        libmagickwand-dev
 
-RUN apt-get install -y imagemagick libmagickwand-dev
-
-RUN rm -r /var/lib/apt/lists/*
+RUN apt-get autoremove -y && apt-get clean && rm -r /var/lib/apt/lists/*
 
 
 # Install PHP extensions
