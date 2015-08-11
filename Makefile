@@ -164,8 +164,8 @@ new-node:
 
 # 清除无用 Containers & Images
 clean:
-	docker rm $(shell docker ps -a | grep "Exited" | awk '{print $$1}')
-	docker rmi $(shell docker images | grep "<none>" | awk '{print $$3}')
+	-docker rm $(shell docker ps -a | grep "Exited" | awk '{print $$1}')
+	-docker rmi $(shell docker images | grep "<none>" | awk '{print $$3}')
 
 # 停止所有 Containers （慎重）
 stop-all:
@@ -173,5 +173,5 @@ stop-all:
 
 # 停止并删除所有 Containers （慎重）
 delete-all:
-	make stop-all
-	docker rm $(shell docker ps -a | grep -v "CONTAINER ID" | awk '{print $$1}')
+	-make stop-all
+	-docker rm $(shell docker ps -a | grep -v "CONTAINER ID" | awk '{print $$1}')
