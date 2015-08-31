@@ -4,8 +4,6 @@ MAINTAINER HyanCat <hyancat@live.cn>
 
 # Nginx Config
 ADD nginx.conf /etc/nginx/nginx.conf
-ADD conf.d.example/*.conf /etc/nginx/conf.d/
-ADD conf.d/*.conf /etc/nginx/conf.d/
 
 # User Permission
 RUN useradd -M -s /usr/sbin/nologin webuser

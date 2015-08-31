@@ -6,6 +6,7 @@ nginx:
       - "phpfpm"
     volumes:
       - ~/Code:/docker/code
+      - ./nginx/conf.d:/etc/nginx/conf.d
 
 phpfpm:
     build: ./php

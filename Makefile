@@ -72,10 +72,12 @@ log:
 build-nginx:
 	docker build -t hyancat/nginx ./nginx
 
+PWD = $(shell /bin/pwd)
 run-nginx:
 	docker run --name nginx-server -d -p 80:80 \
 		--link phpfpm:phpfpm \
 		-v ~/Code:/docker/code \
+		-v ${PWD}/nginx/conf.d:/etc/nginx/conf.d \
 		-t hyancat/nginx
 
 in-nginx:
