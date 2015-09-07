@@ -1,4 +1,6 @@
 php/ext
 php/bin
+php7/ext
+php7/bin
 node/bin
 nginx/conf.d
