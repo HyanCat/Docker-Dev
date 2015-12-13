@@ -23,12 +23,14 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
         && docker-php-ext-install gd \
         && docker-php-ext-install mbstring \
         && docker-php-ext-install mcrypt \
-        && docker-php-ext-install pdo_mysql
-
+        && docker-php-ext-install pdo_mysql \
+        && docker-php-ext-install opcache
 
 # PHP config
 
-ADD php-fpm.conf /usr/local/etc/php-fpm.conf
+ADD conf.d/php-fpm.conf /usr/local/etc/php-fpm.conf
+
+ADD conf.d/php.ini /usr/local/etc/php/php.ini
 
 # Composer
 
