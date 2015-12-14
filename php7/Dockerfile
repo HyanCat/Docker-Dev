@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libpng12-dev \
         imagemagick \
-        libmagickwand-dev
+        libmagickwand-dev \
+        libssl-dev
 
 RUN apt-get autoremove -y && apt-get clean && rm -r /var/lib/apt/lists/*
 

@@ -28,9 +28,7 @@ build:
 	make build-nginx
 	make build-php7
 	make build-mysql
-	make build-memcached
 	make build-redis
-	make build-node
 	docker images
 
 # Docker Container 依次运行
@@ -38,7 +36,6 @@ run:
 	make run-php7
 	make run-nginx
 	make run-mysql
-	make run-memcached
 	make run-redis
 	docker ps -a
 
@@ -47,7 +44,6 @@ restart:
 	docker restart phpfpm
 	docker restart nginx-server
 	docker restart mysql-server
-	docker restart memcached-server
 	docker restart redis-server
 	docker ps
 
@@ -56,12 +52,10 @@ stop:
 	docker stop phpfpm7
 	docker stop nginx-server
 	docker stop mysql-server
-	docker stop memcached-server
 	docker stop redis-server
 	docker rm phpfpm7
 	docker rm nginx-server
 	docker rm mysql-server
-	docker rm memcached-server
 	docker rm redis-server
 
 # Docker Container Logs
@@ -134,6 +128,19 @@ in-mysql:
 
 new-mysql:
 	docker run -i -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} -t hyancat/mysql /bin/bash
+
+################################################################
+####                         Mongo                         #####
+################################################################
+
+build-mongo:
+	docker build -t hyancat/mongo ./mongo
+
+run-mongo:
+	docker run --name mongodb-server -d -p 27017:27017 -t hyancat/mongo
+
+in-mongo:
+	docker exec -it mongodb-server /bin/bash
 
 ################################################################
 ####                       Memcached                       #####
