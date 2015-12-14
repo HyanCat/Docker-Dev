@@ -33,6 +33,11 @@ ADD conf.d/php-fpm.conf /usr/local/etc/php-fpm.conf
 
 ADD conf.d/php.ini /usr/local/etc/php/php.ini
 
+# MongoDB Driver
+
+ADD ext/mongodb.so /usr/local/lib/php/extensions/no-debug-non-zts-20151012/mongodb.so
+ADD conf.d/mongodb.ini /usr/local/etc/php/conf.d/mongodb.ini
+
 # Composer
 
 ADD bin/composer /usr/local/bin/composer
