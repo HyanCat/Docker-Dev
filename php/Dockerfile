@@ -1,4 +1,4 @@
-FROM php:fpm
+FROM php:7-fpm
 
 MAINTAINER HyanCat <hyancat@live.cn>
 
@@ -13,36 +13,30 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libpng12-dev \
         imagemagick \
-        libmagickwand-dev
+        libmagickwand-dev \
+        libssl-dev
 
 RUN apt-get autoremove -y && apt-get clean && rm -r /var/lib/apt/lists/*
 
-
-# Install PHP extensions
-
-COPY ext/memcached.tgz /tmp/memcached.tgz
-COPY ext/redis.tgz /tmp/redis.tgz
-COPY ext/xdebug.tgz /tmp/xdebug.tgz
-COPY ext/memcache.tgz /tmp/memcache.tgz
-COPY ext/imagick.tgz /tmp/imagick.tgz
 
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
         && docker-php-ext-install zip \
         && docker-php-ext-install gd \
         && docker-php-ext-install mbstring \
         && docker-php-ext-install mcrypt \
-        && docker-php-ext-install pdo_mysql
-
-RUN pecl install /tmp/memcached.tgz && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/memcached.ini
-RUN pecl install /tmp/redis.tgz && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
-RUN pecl install /tmp/memcache.tgz && echo "extension=memcache.so" > /usr/local/etc/php/conf.d/memcache.ini
-RUN pecl install /tmp/imagick.tgz && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/imagick.ini
-RUN pecl install /tmp/xdebug.tgz && echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so" > /usr/local/etc/php/conf.d/xdebug.ini
-        
+        && docker-php-ext-install pdo_mysql \
+        && docker-php-ext-install opcache
 
 # PHP config
 
-ADD php-fpm.conf /usr/local/etc/php-fpm.conf
+ADD conf.d/php-fpm.conf /usr/local/etc/php-fpm.conf
+
+ADD conf.d/php.ini /usr/local/etc/php/php.ini
+
+# MongoDB Driver
+
+ADD ext/mongodb.so /usr/local/lib/php/extensions/no-debug-non-zts-20151012/mongodb.so
+ADD conf.d/mongodb.ini /usr/local/etc/php/conf.d/mongodb.ini
 
 # Composer
 
