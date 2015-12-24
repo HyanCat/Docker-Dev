@@ -6,7 +6,6 @@
 pull:
 	docker pull nginx
 	docker pull php:fpm
-	docker pull php:7-fpm
 	docker pull mysql
 	docker pull memcached
 	docker pull redis
@@ -21,19 +20,17 @@ download:
 	wget http://pecl.php.net/get/imagick-3.3.0RC2.tgz -O php/ext/imagick.tgz
 	wget http://getcomposer.org/composer.phar -O php/bin/composer
 
-	cp php/bin/* php7/bin/
-
 # Dockerfile 批量构建 Images
 build:
 	make build-nginx
-	make build-php7
+	make build-php
 	make build-mysql
 	make build-redis
 	docker images
 
 # Docker Container 依次运行
 run:
-	make run-php7
+	make run-php
 	make run-nginx
 	make run-mysql
 	make run-redis
@@ -49,11 +46,11 @@ restart:
 
 # Docker Container 停止并删除
 stop:
-	docker stop phpfpm7
+	docker stop phpfpm
 	docker stop nginx-server
 	docker stop mysql-server
 	docker stop redis-server
-	docker rm phpfpm7
+	docker rm phpfpm
 	docker rm nginx-server
 	docker rm mysql-server
 	docker rm redis-server
@@ -72,7 +69,7 @@ build-nginx:
 PWD = $(shell /bin/pwd)
 run-nginx:
 	docker run --name nginx-server -d -p 80:80 \
-		--link phpfpm7:phpfpm \
+		--link phpfpm:phpfpm \
 		-v ~/Code:/docker/code \
 		-v ${PWD}/nginx/conf.d:/etc/nginx/conf.d \
 		-t hyancat/nginx
@@ -89,24 +86,15 @@ new-nginx:
 
 build-php:
 	docker build -t hyancat/php ./php
-build-php7:
-	docker build -t hyancat/php7 ./php7
 
 run-php:
 	docker run --name phpfpm -d -v ~/Code:/docker/code -t hyancat/php
-run-php7:
-	docker run --name phpfpm7 -d -v ~/Code:/docker/code -t hyancat/php7
-
 
 in-php:
 	docker exec -it phpfpm /bin/bash
-in-php7:
-	docker exec -it phpfpm7 /bin/bash
 
 new-php:
 	docker run -i -v ~/Code:/docker/code -t hyancat/php /bin/bash
-new-php7:
-	docker run -i -v ~/Code:/docker/code -t hyancat/php7 /bin/bash
 
 ################################################################
 ####                         MySQL                         #####
